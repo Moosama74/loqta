@@ -1,0 +1,243 @@
+{% extends "base.html" %}
+
+{% block title %}لوحة إدارة المنصة وتتبع الأرباح والعمولات | لقطة كارز{% endblock %}
+
+{% block content %}
+<div class="bg-slate-900 text-white py-10 border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div>
+            <div class="flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-wider mb-1">
+                <i class="fa-solid fa-chart-pie"></i> مركز إدارة الأرباح والعمولات
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-black">لوحة تحكم منصة لُقطـة (Loqta Admin)</h1>
+            <p class="text-xs text-slate-400 mt-1">تتبع مباشر لكل مصادر الدخل: عمولات الإيجار، رسوم الإعلانات، الفحص، والتقسيط</p>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <span class="bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold px-3 py-1.5 rounded-xl flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                المنصة تعمل بنشاط
+            </span>
+            <a href="/add-listing" class="bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition">
+                + إضافة سيارة للمنصة
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    
+    <!-- 4 Key Revenue Cards (ماكينة الأرباح) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        
+        <!-- Total Platform Revenue -->
+        <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white p-6 rounded-2xl border border-slate-700 shadow-md">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-bold text-slate-400">إجمالي إيرادات المنصة</span>
+                <div class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg">
+                    <i class="fa-solid fa-vault"></i>
+                </div>
+            </div>
+            <div class="text-3xl font-black text-amber-400">{{ stats.total_revenue|format_egp }}</div>
+            <div class="text-[11px] text-slate-400 mt-2 font-medium">مجموع العمولات ورسوم الخدمات</div>
+        </div>
+
+        <!-- Rental Booking Commissions -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-bold text-slate-500">عمولات حجز الإيجار</span>
+                <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg">
+                    <i class="fa-solid fa-key"></i>
+                </div>
+            </div>
+            <div class="text-2xl font-black text-emerald-600">{{ stats.rental_commissions|format_egp }}</div>
+            <div class="text-[11px] text-slate-400 mt-2 font-bold">{{ stats.bookings_count }} حجز مدفوع العربون</div>
+        </div>
+
+        <!-- Featured Listing Fees -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-bold text-slate-500">رسوم الإعلانات المميزة (VIP)</span>
+                <div class="w-9 h-9 rounded-xl bg-orange-50 text-brand-600 flex items-center justify-center text-lg">
+                    <i class="fa-solid fa-crown"></i>
+                </div>
+            </div>
+            <div class="text-2xl font-black text-brand-600">{{ stats.listing_fees|format_egp }}</div>
+            <div class="text-[11px] text-slate-400 mt-2 font-bold">باقات 199 ج و 399 ج لترقية الإعلان</div>
+        </div>
+
+        <!-- Inspection & Finance Revenue -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-bold text-slate-500">الفحص المعتمد + التمويل</span>
+                <div class="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-lg">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+            </div>
+            <div class="text-2xl font-black text-blue-600">{{ (stats.inspection_revenue + stats.finance_commissions)|format_egp }}</div>
+            <div class="text-[11px] text-slate-400 mt-2 font-bold">{{ stats.inspections_count }} طلب فحص وتقسيط</div>
+        </div>
+
+    </div>
+
+    <!-- Section: Rental Bookings with Commission Collection -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div>
+                <h3 class="font-black text-slate-900 text-base flex items-center gap-2">
+                    <i class="fa-solid fa-hand-holding-dollar text-emerald-600"></i> حجوزات الإيجار والعمولات المحصلة
+                </h3>
+                <p class="text-xs text-slate-400">العمولات التي سددها العملاء عبر المنصة كعربون حجز مؤكد</p>
+            </div>
+            <span class="text-xs font-bold bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full">
+                إجمالي عمولات الإيجار: {{ stats.rental_commissions|format_egp }}
+            </span>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full text-xs text-right">
+                <thead class="bg-slate-50 text-slate-500 font-bold border-b border-slate-200">
+                    <tr>
+                        <th class="p-3">رقم الحجز</th>
+                        <th class="p-3">اسم المستأجر</th>
+                        <th class="p-3">رقم الهاتف</th>
+                        <th class="p-3">السيارة</th>
+                        <th class="p-3">المدة</th>
+                        <th class="p-3">إجمالي الإيجار</th>
+                        <th class="p-3 text-emerald-700">عمولة الموقع المحصلة</th>
+                        <th class="p-3">حالة العملية</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 font-semibold text-slate-700">
+                    {% for b in bookings %}
+                    <tr class="hover:bg-slate-50">
+                        <td class="p-3 font-bold text-slate-900">#{{ b.id }}</td>
+                        <td class="p-3 font-bold">{{ b.customer_name }}</td>
+                        <td class="p-3 font-mono" dir="ltr">{{ b.customer_phone }}</td>
+                        <td class="p-3">{{ b.car.title if b.car else 'سيارة إيجار' }}</td>
+                        <td class="p-3">{{ b.total_days }} أيام ({{ b.start_date }})</td>
+                        <td class="p-3">{{ b.total_amount|format_egp }}</td>
+                        <td class="p-3 font-black text-emerald-600 text-sm">{{ b.commission_earned|format_egp }}</td>
+                        <td class="p-3">
+                            <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full">{{ b.payment_status }}</span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 2 Cols: Inspection Requests & Finance Leads -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        <!-- Inspection Requests -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                <h3 class="font-black text-slate-900 text-base flex items-center gap-2">
+                    <i class="fa-solid fa-shield-check text-amber-500"></i> طلبات الفحص المعتمد
+                </h3>
+                <span class="text-xs font-bold text-slate-400">1,500 ج رسوم الفحص</span>
+            </div>
+
+            <div class="space-y-3">
+                {% for ins in inspections %}
+                <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 text-xs flex items-center justify-between">
+                    <div>
+                        <div class="font-bold text-slate-900 text-sm">{{ ins.car_title }}</div>
+                        <div class="text-slate-500 mt-0.5">العميل: {{ ins.customer_name }} | هاتف: <span dir="ltr">{{ ins.customer_phone }}</span></div>
+                        <div class="text-[11px] text-amber-700 font-bold mt-1">{{ ins.center_location }}</div>
+                    </div>
+                    <div class="text-left">
+                        <div class="font-black text-brand-600 text-sm">+{{ ins.inspection_fee|format_egp }}</div>
+                        <span class="bg-amber-100 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded-full">{{ ins.status }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Financing Leads -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                <h3 class="font-black text-slate-900 text-base flex items-center gap-2">
+                    <i class="fa-solid fa-file-invoice-dollar text-blue-600"></i> عمولات التقسيط والبنوك
+                </h3>
+                <span class="text-xs font-bold text-blue-600">عمولة الإحالة البنكية</span>
+            </div>
+
+            <div class="space-y-3">
+                {% for fl in finance_leads %}
+                <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 text-xs flex items-center justify-between">
+                    <div>
+                        <div class="font-bold text-slate-900 text-sm">{{ fl.car_title }}</div>
+                        <div class="text-slate-500 mt-0.5">العميل: {{ fl.customer_name }} | هاتف: <span dir="ltr">{{ fl.customer_phone }}</span></div>
+                        <div class="text-[11px] text-slate-400 font-bold mt-1">الدخل: {{ fl.monthly_income }} - وظيفة: {{ fl.job_type }}</div>
+                    </div>
+                    <div class="text-left">
+                        <div class="font-black text-blue-600 text-sm">+{{ fl.estimated_commission|format_egp }}</div>
+                        <span class="bg-blue-100 text-blue-800 text-[10px] font-bold px-2 py-0.5 rounded-full">{{ fl.status }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Active Cars Listings Table -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <h3 class="font-black text-slate-900 text-base flex items-center gap-2">
+                <i class="fa-solid fa-car text-brand-500"></i> قائمة السيارات المعروضة في المنصة
+            </h3>
+            <span class="text-xs font-bold text-slate-500">إجمالي السيارات: {{ cars|length }}</span>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full text-xs text-right">
+                <thead class="bg-slate-50 text-slate-500 font-bold border-b border-slate-200">
+                    <tr>
+                        <th class="p-3">السيارة</th>
+                        <th class="p-3">السعر</th>
+                        <th class="p-3">المعلن</th>
+                        <th class="p-3">الهاتف</th>
+                        <th class="p-3">نوع الإعلان</th>
+                        <th class="p-3">المشاهدات</th>
+                        <th class="p-3">الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 font-semibold text-slate-700">
+                    {% for car in cars %}
+                    <tr class="hover:bg-slate-50">
+                        <td class="p-3">
+                            <div class="flex items-center gap-2">
+                                <img src="{{ car.main_image }}" class="w-10 h-8 object-cover rounded-lg">
+                                <span class="font-bold text-slate-900">{{ car.title }}</span>
+                            </div>
+                        </td>
+                        <td class="p-3 font-black text-slate-800">{{ car.price|format_egp }}</td>
+                        <td class="p-3">{{ car.seller_name }} ({{ car.seller_type }})</td>
+                        <td class="p-3 font-mono" dir="ltr">{{ car.seller_phone }}</td>
+                        <td class="p-3">
+                            {% if car.listing_tier == 'سوبر VIP' %}
+                            <span class="bg-orange-100 text-orange-800 text-[10px] font-black px-2 py-0.5 rounded-full">سوبر VIP (399 ج)</span>
+                            {% elif car.listing_tier == 'مميز لقطة' %}
+                            <span class="bg-amber-100 text-amber-800 text-[10px] font-black px-2 py-0.5 rounded-full">مميز لقطة (199 ج)</span>
+                            {% else %}
+                            <span class="bg-slate-100 text-slate-600 text-[10px] font-bold px-2 py-0.5 rounded-full">مجاني</span>
+                            {% endif %}
+                        </td>
+                        <td class="p-3">{{ car.views_count }}</td>
+                        <td class="p-3">
+                            <a href="/cars/{{ car.id }}" class="text-brand-600 hover:underline font-bold">معاينة</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block title %}حجز {{ rental.title }} | تأجير سيارات لقطة{% endblock %}
+
+{% block content %}
+<div class="bg-white border-b border-slate-200 py-3.5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center gap-2 text-xs text-slate-500 font-semibold">
+        <a href="/" class="hover:text-brand-600">الرئيسية</a>
+        <i class="fa-solid fa-chevron-left text-[10px]"></i>
+        <a href="/rentals" class="hover:text-brand-600">إيجار سيارات</a>
+        <i class="fa-solid fa-chevron-left text-[10px]"></i>
+        <span class="text-slate-800 font-bold">{{ rental.title }}</span>
+    </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- Left: Image and Terms -->
+        <div class="lg:col-span-2 space-y-6">
+            <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                <div class="h-96 bg-slate-900">
+                    <img src="{{ rental.image }}" alt="{{ rental.title }}" class="w-full h-full object-cover">
+                </div>
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="bg-emerald-100 text-emerald-800 text-xs font-black px-3 py-1 rounded-full">جاهزة للاستلام الفوري</span>
+                        <span class="text-xs text-slate-400"><i class="fa-solid fa-location-dot text-brand-500 ml-1"></i> {{ rental.governorate }} - {{ rental.city }}</span>
+                    </div>
+                    <h1 class="text-2xl font-black text-slate-900 mb-2">{{ rental.title }}</h1>
+                    <p class="text-xs text-slate-500">المكتب المسؤول: <strong class="text-slate-800">{{ rental.company_name }}</strong></p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-3">
+                <h3 class="font-black text-slate-900 text-base flex items-center gap-2">
+                    <i class="fa-solid fa-file-contract text-emerald-600"></i> شروط وتعليمات الإيجار
+                </h3>
+                <ul class="text-xs text-slate-600 space-y-2 list-disc list-inside leading-relaxed">
+                    <li>بطاقة الرقم القومي سارية للمصريين أو جواز السفر ساري للأجانب والأخوة العرب.</li>
+                    <li>رخصة قيادة خاصة سارية المفعول (في حال طلب القيادة بدون سائق).</li>
+                    <li>دفع عربون الحجز (عمولة المنصة) أونلاين لتأكيد حجز السيارة وتثبيتها باسمك.</li>
+                    <li>باقي مبلغ الإيجار الإجمالي يسدد نقداً أو كارت عند الاستلام مباشرة من المكتب.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Right: Booking Form & Commission Breakdown -->
+        <div class="space-y-6">
+            <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-md sticky top-24">
+                <h3 class="font-black text-slate-900 text-lg mb-1 flex items-center gap-2">
+                    <i class="fa-solid fa-calendar-check text-emerald-600"></i> نموذج حجز السيارة
+                </h3>
+                <p class="text-xs text-slate-400 mb-5">ادفع العربون الآن واستلم السيارة في موعدك</p>
+
+                <form id="rentalBookingForm" onsubmit="submitRentalBooking(event)" class="space-y-4 text-xs">
+                    <input type="hidden" name="rental_id" value="{{ rental.id }}">
+
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">الاسم بالكامل</label>
+                        <input type="text" name="customer_name" required placeholder="اسم المستأجر" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold outline-none focus:ring-2 focus:ring-emerald-500">
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">رقم الهاتف (واتساب)</label>
+                        <input type="tel" name="customer_phone" required placeholder="01012345678" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold outline-none focus:ring-2 focus:ring-emerald-500">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">تاريخ البدء</label>
+                            <input type="date" id="startDate" name="start_date" required onchange="calcRentalTotal()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold outline-none">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">تاريخ الانتهاء</label>
+                            <input type="date" id="endDate" name="end_date" required onchange="calcRentalTotal()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold outline-none">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">عدد الأيام</label>
+                        <input type="number" id="totalDays" name="total_days" value="1" min="1" oninput="calcRentalTotal()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold outline-none">
+                    </div>
+
+                    <!-- Cost Breakdown -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2 text-xs">
+                        <div class="flex justify-between text-slate-500">
+                            <span>سعر اليوم:</span>
+                            <span class="font-bold text-slate-800">{{ rental.daily_price|format_egp }}</span>
+                        </div>
+                        <div class="flex justify-between text-slate-500">
+                            <span>إجمالي مدة الإيجار:</span>
+                            <span id="displayTotalDays" class="font-bold text-slate-800">1 يوم</span>
+                        </div>
+                        <div class="flex justify-between text-slate-500">
+                            <span>إجمالي قيمة الإيجار:</span>
+                            <span id="displayTotalAmount" class="font-bold text-slate-800">{{ rental.daily_price|format_egp }}</span>
+                        </div>
+                        <div class="pt-2 border-t border-slate-200 flex justify-between text-amber-700 font-black">
+                            <span>عربون الحجز المطلوب للمنصة:</span>
+                            <span class="text-sm text-emerald-600">{{ rental.deposit_commission|format_egp }}</span>
+                        </div>
+                        <p class="text-[10px] text-slate-400 leading-tight">
+                            * العربون يمثل عمولة منصة لقطة لحفظ حجزك، ويسدد المتبقي لمكتب التأجير عند الاستلام.
+                        </p>
+                    </div>
+
+                    <div class="space-y-2 pt-1">
+                        <label class="block font-bold text-slate-700">طريقة سداد العربون المعتمدة:</label>
+                        <div class="grid grid-cols-2 gap-2 text-[11px] font-bold">
+                            <label class="bg-slate-100 p-2 rounded-xl flex items-center gap-1.5 cursor-pointer border hover:border-emerald-500">
+                                <input type="radio" name="pay_opt" checked> فودافون كاش
+                            </label>
+                            <label class="bg-slate-100 p-2 rounded-xl flex items-center gap-1.5 cursor-pointer border hover:border-emerald-500">
+                                <input type="radio" name="pay_opt"> إنستاباي InstaPay
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-3 rounded-xl text-xs transition shadow-lg shadow-emerald-600/20">
+                        تأكيد الحجز ودفع العربون ({{ rental.deposit_commission }} ج.م)
+                    </button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    const dailyPrice = {{ rental.daily_price }};
+    
+    function calcRentalTotal() {
+        const days = Math.max(1, parseInt(document.getElementById('totalDays').value) || 1);
+        const total = dailyPrice * days;
+        document.getElementById('displayTotalDays').innerText = days + " أيام";
+        document.getElementById('displayTotalAmount').innerText = total.toLocaleString('ar-EG') + " ج.م";
+    }
+
+    async function submitRentalBooking(e) {
+        e.preventDefault();
+        const form = e.target;
+        const formData = new FormData(form);
+        const res = await fetch('/api/book-rental', { method: 'POST', body: formData });
+        const data = await res.json();
+        if(data.status === 'success') {
+            showToast(data.message, true);
+            setTimeout(() => {
+                window.location.href = '/rentals';
+            }, 3000);
+        }
+    }
+</script>
+{% endblock %}

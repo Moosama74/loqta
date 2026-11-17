@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}إيجار سيارات في مصر | إيجار يومي وشهري وسياحي - لقطة{% endblock %}
+
+{% block content %}
+<div class="bg-gradient-to-r from-slate-900 to-slate-800 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-2xl">
+            <span class="text-emerald-400 font-bold text-xs uppercase tracking-wider">أسطول إيجار لقطة المعتمد</span>
+            <h1 class="text-3xl sm:text-4xl font-black mt-1">تأجير سيارات بالسائق وبدون في مصر</h1>
+            <p class="text-slate-300 text-sm mt-2">
+                احجز سيارتك أونلاين بدفع عربون رمزي مؤكد (عمولة المنصة)، واستلم سيارتك من المعرض أو المطار فوراً مع كامل الضمانات.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <!-- Filter Bar -->
+    <div class="bg-white p-4 rounded-2xl border border-slate-200 mb-8 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-2">
+            <span class="text-xs font-bold text-slate-600">المحافظة:</span>
+            <div class="flex flex-wrap gap-1.5 text-xs">
+                <a href="/rentals" class="px-3 py-1.5 rounded-xl font-bold {% if not selected_gov or selected_gov == 'الكل' %}bg-emerald-600 text-white{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200{% endif %}">الكل</a>
+                <a href="/rentals?governorate=القاهرة" class="px-3 py-1.5 rounded-xl font-bold {% if selected_gov == 'القاهرة' %}bg-emerald-600 text-white{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200{% endif %}">القاهرة</a>
+                <a href="/rentals?governorate=الجيزة" class="px-3 py-1.5 rounded-xl font-bold {% if selected_gov == 'الجيزة' %}bg-emerald-600 text-white{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200{% endif %}">الجيزة</a>
+                <a href="/rentals?governorate=الإسكندرية" class="px-3 py-1.5 rounded-xl font-bold {% if selected_gov == 'الإسكندرية' %}bg-emerald-600 text-white{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200{% endif %}">الإسكندرية</a>
+            </div>
+        </div>
+
+        <div class="text-xs font-bold text-slate-500">
+            متاح حالياً <span class="text-emerald-600 font-black">{{ rentals|length }} سيارة</span> جاهزة للحجز
+        </div>
+    </div>
+
+    <!-- Rentals Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for rental in rentals %}
+        <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition-all flex flex-col group">
+            
+            <div class="relative h-56 overflow-hidden bg-slate-100">
+                <img src="{{ rental.image }}" alt="{{ rental.title }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                <div class="absolute bottom-3 right-3 bg-slate-900/80 backdrop-blur text-white text-xs font-bold px-3 py-1 rounded-lg">
+                    <i class="fa-solid fa-location-dot text-brand-500 ml-1"></i> {{ rental.governorate }} - {{ rental.city }}
+                </div>
+                {% if rental.with_driver %}
+                <div class="absolute top-3 left-3 bg-blue-600 text-white text-xs font-bold px-2.5 py-1 rounded-lg shadow">
+                    <i class="fa-solid fa-user-tie ml-1"></i> بسائق متاح
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="p-5 flex flex-col flex-grow">
+                <h3 class="font-black text-slate-900 text-base mb-2 group-hover:text-emerald-600 transition">
+                    {{ rental.title }}
+                </h3>
+
+                <div class="text-xs text-slate-500 mb-4 flex items-center gap-1.5">
+                    <i class="fa-solid fa-building-circle-check text-emerald-600"></i>
+                    <span>مكتب: <strong>{{ rental.company_name }}</strong></span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 text-center text-xs font-bold text-slate-600 bg-slate-50 p-3 rounded-xl mb-4 border border-slate-100">
+                    <div>
+                        <div class="text-[10px] text-slate-400 font-medium">إيجار يومي</div>
+                        <div class="text-base text-emerald-600 font-black">{{ rental.daily_price|format_egp }}</div>
+                    </div>
+                    <div>
+                        <div class="text-[10px] text-slate-400 font-medium">عربون الحجز للموقع</div>
+                        <div class="text-base text-amber-600 font-black">{{ rental.deposit_commission|format_egp }}</div>
+                    </div>
+                </div>
+
+                <div class="mt-auto pt-3 border-t border-slate-100 flex items-center justify-between gap-3">
+                    <a href="/rentals/{{ rental.id }}" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-2.5 rounded-xl text-xs text-center transition shadow">
+                        احجز الآن ودفع العربون
+                    </a>
+                </div>
+            </div>
+
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

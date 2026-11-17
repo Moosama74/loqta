@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}معارض سيارات معتمدة في مصر | منصة لقطة{% endblock %}
+
+{% block content %}
+<div class="bg-slate-900 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h1 class="text-3xl font-black mb-2">معارض وتجار السيارات المعتمدين في مصر</h1>
+        <p class="text-slate-400 text-sm max-w-xl">
+            تصفح كبرى معارض السيارات في القاهرة، الجيزة، والإسكندرية وتواصل معهم مباشرة لشراء أو استبدال سيارتك.
+        </p>
+    </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {% for showroom in showrooms %}
+        <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-lg transition flex flex-col">
+            <div class="h-32 bg-slate-800 relative">
+                <img src="{{ showroom.banner }}" alt="{{ showroom.name }}" class="w-full h-full object-cover opacity-70">
+                <div class="absolute -bottom-6 right-6 w-16 h-16 rounded-2xl bg-white p-1 shadow-md border border-slate-100 overflow-hidden">
+                    <img src="{{ showroom.logo }}" alt="{{ showroom.name }}" class="w-full h-full object-cover rounded-xl">
+                </div>
+            </div>
+
+            <div class="pt-9 p-6 flex flex-col flex-grow">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="font-black text-slate-900 text-lg">{{ showroom.name }}</h3>
+                    <span class="bg-amber-100 text-amber-800 text-[10px] font-black px-2 py-0.5 rounded-full">{{ showroom.subscription_tier }}</span>
+                </div>
+
+                <div class="text-xs text-slate-500 space-y-1.5 mb-4">
+                    <div><i class="fa-solid fa-location-dot text-brand-500 ml-1.5"></i> {{ showroom.governorate }} - {{ showroom.city }}</div>
+                    <div><i class="fa-solid fa-map-pin text-slate-400 ml-1.5"></i> {{ showroom.address }}</div>
+                    <div><i class="fa-solid fa-phone text-emerald-600 ml-1.5"></i> {{ showroom.phone }}</div>
+                </div>
+
+                <div class="mt-auto pt-3 border-t border-slate-100 flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-400">{{ showroom.cars|length }} سيارة متاحة</span>
+                    <a href="/showrooms/{{ showroom.slug }}" class="bg-brand-50 text-brand-700 hover:bg-brand-600 hover:text-white font-bold text-xs px-4 py-2 rounded-xl transition">
+                        عرض سيارات المعرض
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block title %}حاسبة تقسيط السيارات في مصر | تمويل معتمد - لقطة{% endblock %}
+
+{% block content %}
+<div class="bg-gradient-to-r from-blue-900 to-slate-900 text-white py-14">
+    <div class="max-w-4xl mx-auto px-4 text-center space-y-3">
+        <span class="text-blue-400 font-bold text-xs uppercase tracking-widest">خدمات تمويل لقطة</span>
+        <h1 class="text-3xl sm:text-4xl font-black">حاسبة تقسيط وتمويل السيارات في مصر</h1>
+        <p class="text-slate-300 text-sm max-w-xl mx-auto">
+            احسب قسط سيارتك المستعملة أو الزيرو وقدم طلبك للتقسيط بالتعاون مع بنوك وشركات التمويل الشريكة بأقل فائدة.
+        </p>
+    </div>
+</div>
+
+<div class="max-w-4xl mx-auto px-4 py-12">
+    <div class="bg-white rounded-3xl border border-slate-200 p-8 shadow-xl grid grid-cols-1 md:grid-cols-2 gap-8">
+        
+        <!-- Calculator Inputs -->
+        <div class="space-y-4">
+            <h3 class="font-black text-slate-900 text-lg flex items-center gap-2">
+                <i class="fa-solid fa-calculator text-blue-600"></i> بيانات الحساب
+            </h3>
+
+            <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">سعر السيارة التقديري (ج.م)</label>
+                <input type="number" id="genCarPrice" value="1000000" oninput="runGenCalc()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold outline-none">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">المقدم المدفوع (ج.م)</label>
+                <input type="number" id="genDown" value="250000" oninput="runGenCalc()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold outline-none">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">مدة التقسيط</label>
+                <select id="genYears" onchange="runGenCalc()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold outline-none">
+                    <option value="1">سنة واحدة (12 شهر)</option>
+                    <option value="2">سنتين (24 شهر)</option>
+                    <option value="3" selected>3 سنوات (36 شهر)</option>
+                    <option value="4">4 سنوات (48 شهر)</option>
+                    <option value="5">5 سنوات (60 شهر)</option>
+                </select>
+            </div>
+
+            <div class="bg-blue-50 p-4 rounded-2xl border border-blue-100 text-center space-y-1">
+                <span class="text-xs text-blue-700 font-bold">القسط الشهري المتوقع:</span>
+                <div id="genResult" class="text-2xl font-black text-blue-600">0 ج.م / شهر</div>
+            </div>
+        </div>
+
+        <!-- Lead Form -->
+        <div class="space-y-4 border-t md:border-t-0 md:border-r border-slate-100 pt-6 md:pt-0 md:pr-8">
+            <h3 class="font-black text-slate-900 text-lg flex items-center gap-2">
+                <i class="fa-solid fa-file-signature text-emerald-600"></i> تقديم طلب تقسيط فوري
+            </h3>
+            <p class="text-xs text-slate-500">سيتواصل معك مستشار التمويل المعتمد لإنهاء الإجراءات والموافقة البنكية.</p>
+
+            <form onsubmit="submitGenFinance(event)" class="space-y-3 text-xs">
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">اسم العميل *</label>
+                    <input type="text" name="customer_name" required placeholder="الاسم ثلاثي" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs outline-none">
+                </div>
+
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">رقم الهاتف (واتساب) *</label>
+                    <input type="tel" name="customer_phone" required placeholder="01012345678" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs outline-none">
+                </div>
+
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">السيارة المراد تقسيطها</label>
+                    <input type="text" name="car_title" required placeholder="مثال: هيونداي إلنترا 2022" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs outline-none">
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">نوع الوظيفة</label>
+                        <select name="job_type" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2 py-2 text-xs outline-none">
+                            <option value="قطاع خاص">قطاع خاص</option>
+                            <option value="موظف حكومي">حكومي</option>
+                            <option value="عمل حر">سجل تجاري</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">متوسط الدخل</label>
+                        <select name="monthly_income" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-2 py-2 text-xs outline-none">
+                            <option value="15-25 ألف">15-25 ألف</option>
+                            <option value="25-45 ألف">25-45 ألف</option>
+                            <option value="+45 ألف">+45 ألف</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-3 rounded-xl text-xs transition shadow-lg shadow-blue-600/20">
+                    إرسال طلب التقسيط المعتمد
+                </button>
+            </form>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    function runGenCalc() {
+        const price = parseFloat(document.getElementById('genCarPrice').value) || 0;
+        const down = parseFloat(document.getElementById('genDown').value) || 0;
+        const years = parseInt(document.getElementById('genYears').value) || 3;
+        const remaining = Math.max(0, price - down);
+        const interest = remaining * 0.18 * years;
+        const total = remaining + interest;
+        const monthly = Math.round(total / (years * 12));
+        document.getElementById('genResult').innerText = monthly.toLocaleString('ar-EG') + " ج.م / شهر";
+    }
+    runGenCalc();
+
+    async function submitGenFinance(e) {
+        e.preventDefault();
+        const form = e.target;
+        const formData = new FormData(form);
+        formData.append('car_price', document.getElementById('genCarPrice').value);
+        formData.append('down_payment', document.getElementById('genDown').value);
+        formData.append('installments_years', document.getElementById('genYears').value);
+
+        const res = await fetch('/api/finance-lead', { method: 'POST', body: formData });
+        const data = await res.json();
+        showToast(data.message, true);
+        form.reset();
+    }
+</script>
+{% endblock %}

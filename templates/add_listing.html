@@ -1,0 +1,235 @@
+{% extends "base.html" %}
+
+{% block title %}أضف سيارتك للبيع | منصة لقطة للسيارات{% endblock %}
+
+{% block content %}
+<div class="bg-gradient-to-r from-brand-600 to-orange-600 text-white py-10">
+    <div class="max-w-4xl mx-auto px-4 text-center space-y-2">
+        <h1 class="text-3xl font-black">أضف سيارتك للبيع في مصر في دقائق</h1>
+        <p class="text-orange-100 text-sm">
+            اعرض سيارتك أمام آلاف المشترين الجادين يومياً، واختر الباقة المناسبة للبيع بسرعة وسعر لقطة.
+        </p>
+    </div>
+</div>
+
+<div class="max-w-4xl mx-auto px-4 py-10">
+    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-10 shadow-lg">
+        
+        <form action="/add-listing" method="POST" class="space-y-8">
+            
+            <!-- Step 1: Basic Vehicle Info -->
+            <div class="space-y-4">
+                <h3 class="text-lg font-black text-slate-900 pb-3 border-b border-slate-100 flex items-center gap-2">
+                    <span class="w-7 h-7 bg-brand-50 text-brand-600 rounded-full flex items-center justify-center text-xs font-black">1</span>
+                    البيانات الأساسية للسيارة
+                </h3>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">عنوان الإعلان *</label>
+                        <input type="text" name="title" required placeholder="مثال: هيونداي إلنترا 2022 فابريكا بالكامل" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold outline-none focus:ring-2 focus:ring-brand-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">الماركة *</label>
+                        <select name="make" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold outline-none focus:ring-2 focus:ring-brand-500">
+                            <option value="هيونداي">هيونداي (Hyundai)</option>
+                            <option value="كيا">كيا (Kia)</option>
+                            <option value="تويوتا">تويوتا (Toyota)</option>
+                            <option value="نيسان">نيسان (Nissan)</option>
+                            <option value="مرسيدس">مرسيدس (Mercedes)</option>
+                            <option value="شيري">شيري (Chery)</option>
+                            <option value="إم جي">إم جي (MG)</option>
+                            <option value="سكودا">سكودا (Skoda)</option>
+                            <option value="بي إم دبليو">بي إم دبليو (BMW)</option>
+                            <option value="فيات">فيات (Fiat)</option>
+                            <option value="رينو">رينو (Renault)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">الموديل *</label>
+                        <input type="text" name="model" required placeholder="مثال: إلنترا CN7 / سيراتو / كورولا" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold outline-none focus:ring-2 focus:ring-brand-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">سنة الصنع *</label>
+                        <input type="number" name="year" value="2022" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">السعر المطلوب (ج.م) *</label>
+                        <input type="number" name="price" required placeholder="مثال: 950000" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold outline-none focus:ring-2 focus:ring-brand-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">طريقة الدفع</label>
+                        <select name="payment_type" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold outline-none">
+                            <option value="كاش">كاش فقط</option>
+                            <option value="كاش أو قسط">كاش أو قسط</option>
+                            <option value="قسط فقط">قسط فقط</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Technical Specifications & Condition -->
+            <div class="space-y-4">
+                <h3 class="text-lg font-black text-slate-900 pb-3 border-b border-slate-100 flex items-center gap-2">
+                    <span class="w-7 h-7 bg-brand-50 text-brand-600 rounded-full flex items-center justify-center text-xs font-black">2</span>
+                    الحالة والمواصفات الفنية
+                </h3>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">حالة السيارة</label>
+                        <select name="condition" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold outline-none">
+                            <option value="مستعمل">مستعمل</option>
+                            <option value="زيرو">زيرو</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">حالة الدهان</label>
+                        <select name="paint_condition" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold outline-none">
+                            <option value="فابريكا بالكامل">فابريكا بالكامل بدون أي دهانات</option>
+                            <option value="راشة نظافة خارجي فابريكا دواخل">راشة نظافة خارجي (فابريكا دواخل)</option>
+                            <option value="راشة حزام فابريكا سقف ودواخل">راشة حزام نظافة</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">العداد (كم)</label>
+                        <input type="number" name="mileage" value="50000" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">ناقل الحركة (الفتيس)</label>
+                        <select name="transmission" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold outline-none">
+                            <option value="أوتوماتيك">أوتوماتيك</option>
+                            <option value="مانيوال">مانيوال</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">المحافظة</label>
+                        <select name="governorate" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold outline-none">
+                            <option value="القاهرة">القاهرة</option>
+                            <option value="الجيزة">الجيزة</option>
+                            <option value="الإسكندرية">الإسكندرية</option>
+                            <option value="الشرقية">الشرقية</option>
+                            <option value="الدقهلية">الدقهلية</option>
+                            <option value="الغربية">الغربية</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">المدينة / الحي</label>
+                        <input type="text" name="city" placeholder="مثال: مدينة نصر / الدقي" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">رابط صورة السيارة الرئيسية (URL أو مسار)</label>
+                    <input type="text" name="main_image" value="https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800&auto=format&fit=crop&q=80" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">وصف إضافي وملاحظات البائع</label>
+                    <textarea name="description" rows="3" placeholder="اكتب تفاصيل أكثر: حالة الرخصه، الصيانات، الكاوتش، فتحة السقف..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs font-medium outline-none focus:ring-2 focus:ring-brand-500"></textarea>
+                </div>
+            </div>
+
+            <!-- Step 3: Seller Contact Details -->
+            <div class="space-y-4">
+                <h3 class="text-lg font-black text-slate-900 pb-3 border-b border-slate-100 flex items-center gap-2">
+                    <span class="w-7 h-7 bg-brand-50 text-brand-600 rounded-full flex items-center justify-center text-xs font-black">3</span>
+                    بيانات التواصل
+                </h3>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">اسم البائع / المعلن *</label>
+                        <input type="text" name="seller_name" required placeholder="اسمك الكريم" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">رقم الهاتف للاتصال *</label>
+                        <input type="tel" name="seller_phone" required placeholder="01012345678" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">رقم الواتساب *</label>
+                        <input type="tel" name="seller_whatsapp" required placeholder="201012345678" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold outline-none">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4: Monetization - Choose Listing Package (باقات الربح للمنصة) -->
+            <div class="space-y-4">
+                <h3 class="text-lg font-black text-slate-900 pb-3 border-b border-slate-100 flex items-center gap-2">
+                    <span class="w-7 h-7 bg-amber-100 text-amber-700 rounded-full flex items-center justify-center text-xs font-black">4</span>
+                    اختر باقة ظهور الإعلان (لتحقيق أعلى وأسرع مبيعات)
+                </h3>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <!-- Free Tier -->
+                    <label class="relative border-2 border-slate-200 rounded-2xl p-4 cursor-pointer hover:border-slate-400 transition flex flex-col justify-between">
+                        <input type="radio" name="listing_tier" value="مجاني" checked class="absolute top-4 left-4">
+                        <div>
+                            <div class="font-bold text-slate-800 text-sm mb-1">إعلان عادي (مجاني)</div>
+                            <div class="text-xs text-slate-400 mb-3">0 ج.م</div>
+                            <ul class="text-[11px] text-slate-500 space-y-1.5 list-disc list-inside">
+                                <li>ظهور في قائمة السيارات العامة</li>
+                                <li>صلاحية 30 يوم</li>
+                                <li>ظهور اعتيادي في البحث</li>
+                            </ul>
+                        </div>
+                    </label>
+
+                    <!-- Featured Tier (199 EGP) -->
+                    <label class="relative border-2 border-amber-400 bg-amber-50/40 rounded-2xl p-4 cursor-pointer hover:border-amber-500 transition flex flex-col justify-between">
+                        <input type="radio" name="listing_tier" value="مميز لقطة" class="absolute top-4 left-4">
+                        <div>
+                            <div class="flex items-center gap-1 font-black text-amber-800 text-sm mb-1">
+                                <i class="fa-solid fa-crown text-amber-500 text-xs"></i> إعلان مميز لقطة
+                            </div>
+                            <div class="text-xs font-black text-brand-600 mb-3">199 ج.م فقط</div>
+                            <ul class="text-[11px] text-slate-600 space-y-1.5 list-disc list-inside font-semibold">
+                                <li>تثبيت في أول نتائج البحث لمدة 14 يوم</li>
+                                <li>شارة ذهبية ملفتة للانتباه</li>
+                                <li>مشاهدات أكثر 4 أضعاف</li>
+                            </ul>
+                        </div>
+                    </label>
+
+                    <!-- Super VIP Tier (399 EGP) -->
+                    <label class="relative border-2 border-orange-500 bg-orange-50/50 rounded-2xl p-4 cursor-pointer hover:border-orange-600 transition flex flex-col justify-between">
+                        <input type="radio" name="listing_tier" value="سوبر VIP" class="absolute top-4 left-4">
+                        <div>
+                            <div class="flex items-center gap-1 font-black text-orange-900 text-sm mb-1">
+                                <i class="fa-solid fa-bolt text-orange-500 text-xs"></i> باقة سوبر VIP
+                            </div>
+                            <div class="text-xs font-black text-brand-600 mb-3">399 ج.م</div>
+                            <ul class="text-[11px] text-slate-700 space-y-1.5 list-disc list-inside font-bold">
+                                <li>تثبيت في الصفحة الرئيسية 30 يوم</li>
+                                <li>إشعار مباشر لمشتري الماركة</li>
+                                <li>نشر على صفحات ومجموعات لقطة</li>
+                            </ul>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="pt-4">
+                <button type="submit" class="w-full bg-gradient-to-r from-brand-600 to-orange-500 hover:from-brand-700 hover:to-orange-600 text-white font-black py-4 rounded-2xl text-base shadow-xl shadow-orange-500/25 transition">
+                    نشر الإعلان على منصة لقطة الآن
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+{% endblock %}

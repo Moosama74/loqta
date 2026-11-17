@@ -1,0 +1,388 @@
+{% extends "base.html" %}
+
+{% block title %}لقطة | بيع، شراء وتأجير السيارات في مصر بأفضل الصفقات والعمولات{% endblock %}
+
+{% block content %}
+<!-- Hero Section with Search Engine -->
+<section class="relative bg-gradient-to-b from-slate-900 via-slate-900 to-slate-800 text-white pt-12 pb-24 overflow-hidden">
+    <!-- Background subtle grid glow -->
+    <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#ea580c_1px,transparent_1px)] [background-size:16px_16px]"></div>
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="text-center max-w-3xl mx-auto mb-10 space-y-3">
+            <div class="inline-flex items-center gap-2 bg-brand-500/10 border border-brand-500/30 px-3.5 py-1.5 rounded-full text-xs font-bold text-amber-400">
+                <i class="fa-solid fa-bolt text-brand-500"></i> أكثر من {{ stats.cars }} سيارة معروضة للبيع والإيجار اليوم
+            </div>
+            <h1 class="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
+                عربيتك الجاية في مصر.. <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-400 to-brand-500">لُقطـة بجد!</span>
+            </h1>
+            <p class="text-slate-300 text-sm sm:text-base font-medium max-w-2xl mx-auto">
+                المنصة الذكية لبيع، شراء، وتأجير السيارات مع خدمة الفحص المعتمد وحجز الإيجار الفوري.
+            </p>
+        </div>
+
+        <!-- Search Box Container (Like Hatla2ee / Dubizzle) -->
+        <div class="bg-white rounded-3xl p-4 sm:p-6 shadow-2xl max-w-5xl mx-auto text-slate-800 border border-slate-100">
+            <!-- Tabs -->
+            <div class="flex items-center gap-3 border-b border-slate-100 pb-4 mb-5 text-sm font-black">
+                <a href="/cars" class="flex items-center gap-2 text-brand-600 bg-brand-50 px-4 py-2 rounded-xl transition">
+                    <i class="fa-solid fa-car"></i> سيارات للبيع (مستعمل وزيرو)
+                </a>
+                <a href="/rentals" class="flex items-center gap-2 text-slate-500 hover:text-slate-800 px-4 py-2 rounded-xl transition">
+                    <i class="fa-solid fa-key"></i> إيجار سيارات
+                </a>
+                <a href="/cars?only_featured=true" class="flex items-center gap-2 text-amber-600 hover:text-amber-700 px-4 py-2 rounded-xl transition">
+                    <i class="fa-solid fa-crown text-amber-500"></i> صفقات لقطة VIP
+                </a>
+            </div>
+
+            <!-- Search Form -->
+            <form action="/cars" method="GET" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
+                <!-- Make -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1.5">الماركة</label>
+                    <div class="relative">
+                        <select name="make" class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-3 py-2.5 text-sm font-semibold focus:ring-2 focus:ring-brand-500 outline-none">
+                            <option value="الكل">كل الماركات</option>
+                            <option value="هيونداي">هيونداي (Hyundai)</option>
+                            <option value="كيا">كيا (Kia)</option>
+                            <option value="تويوتا">تويوتا (Toyota)</option>
+                            <option value="نيسان">نيسان (Nissan)</option>
+                            <option value="مرسيدس">مرسيدس (Mercedes)</option>
+                            <option value="شيري">شيري (Chery)</option>
+                            <option value="إم جي">إم جي (MG)</option>
+                            <option value="سكودا">سكودا (Skoda)</option>
+                            <option value="بي إم دبليو">بي إم دبليو (BMW)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Governorate -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1.5">المحافظة</label>
+                    <select name="governorate" class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-3 py-2.5 text-sm font-semibold focus:ring-2 focus:ring-brand-500 outline-none">
+                        <option value="الكل">جميع المحافظات</option>
+                        <option value="القاهرة">القاهرة</option>
+                        <option value="الجيزة">الجيزة</option>
+                        <option value="الإسكندرية">الإسكندرية</option>
+                        <option value="الشرقية">الشرقية</option>
+                        <option value="الدقهلية">الدقهلية</option>
+                        <option value="الغربية">الغربية</option>
+                        <option value="القليوبية">القليوبية</option>
+                    </select>
+                </div>
+
+                <!-- Min Year -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1.5">سنة الصنع من</label>
+                    <select name="year_min" class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-3 py-2.5 text-sm font-semibold focus:ring-2 focus:ring-brand-500 outline-none">
+                        <option value="">أي سنة</option>
+                        <option value="2024">2024</option>
+                        <option value="2023">2023</option>
+                        <option value="2022">2022</option>
+                        <option value="2021">2021</option>
+                        <option value="2020">2020</option>
+                        <option value="2018">2018</option>
+                        <option value="2015">2015</option>
+                    </select>
+                </div>
+
+                <!-- Max Price -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1.5">أقصى سعر (ج.م)</label>
+                    <select name="price_max" class="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-3 py-2.5 text-sm font-semibold focus:ring-2 focus:ring-brand-500 outline-none">
+                        <option value="">أي سعر</option>
+                        <option value="400000">حتى 400 ألف</option>
+                        <option value="700000">حتى 700 ألف</option>
+                        <option value="1000000">حتى 1 مليون</option>
+                        <option value="1500000">حتى 1.5 مليون</option>
+                        <option value="2500000">حتى 2.5 مليون</option>
+                    </select>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="flex items-end">
+                    <button type="submit" class="w-full bg-gradient-to-r from-brand-600 to-orange-500 hover:from-brand-700 hover:to-orange-600 text-white font-black py-2.5 px-4 rounded-xl text-sm flex items-center justify-center gap-2 shadow-lg shadow-orange-500/25 transition">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <span>بحث عن سيارة</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Quick Brands Strip -->
+        <div class="mt-8 flex flex-wrap items-center justify-center gap-3 text-xs font-bold text-slate-300">
+            <span class="text-slate-400">الماركات الأكثر طلباً:</span>
+            <a href="/cars?make=هيونداي" class="bg-slate-800/80 hover:bg-brand-600/30 hover:text-white px-3 py-1.5 rounded-lg border border-slate-700 transition">هيونداي</a>
+            <a href="/cars?make=كيا" class="bg-slate-800/80 hover:bg-brand-600/30 hover:text-white px-3 py-1.5 rounded-lg border border-slate-700 transition">كيا</a>
+            <a href="/cars?make=تويوتا" class="bg-slate-800/80 hover:bg-brand-600/30 hover:text-white px-3 py-1.5 rounded-lg border border-slate-700 transition">تويوتا</a>
+            <a href="/cars?make=نيسان" class="bg-slate-800/80 hover:bg-brand-600/30 hover:text-white px-3 py-1.5 rounded-lg border border-slate-700 transition">نيسان</a>
+            <a href="/cars?make=مرسيدس" class="bg-slate-800/80 hover:bg-brand-600/30 hover:text-white px-3 py-1.5 rounded-lg border border-slate-700 transition">مرسيدس</a>
+            <a href="/cars?make=شيري" class="bg-slate-800/80 hover:bg-brand-600/30 hover:text-white px-3 py-1.5 rounded-lg border border-slate-700 transition">شيري</a>
+        </div>
+    </div>
+</section>
+
+<!-- Section 1: Featured VIP "لقطة" Cars (إعلانات لقطة المميزة) -->
+<section class="py-14 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+        <div>
+            <div class="flex items-center gap-2 text-amber-500 font-extrabold text-xs uppercase tracking-wider mb-1">
+                <i class="fa-solid fa-crown text-sm"></i> إعلانات مميزة ومدفوعة
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-black text-slate-900">صفقات لُقطـة VIP الأسبوعية</h2>
+            <p class="text-slate-500 text-xs sm:text-sm mt-0.5">سيارات مفحوصة ومختارة بعناية بأسعار منافسة للسوق</p>
+        </div>
+        <a href="/cars?only_featured=true" class="text-brand-600 hover:text-brand-700 font-bold text-sm flex items-center gap-1 group">
+            <span>عرض كل صفقات لقطة</span>
+            <i class="fa-solid fa-arrow-left text-xs transition transform group-hover:-translate-x-1"></i>
+        </a>
+    </div>
+
+    <!-- Cars Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for car in featured_cars %}
+        <div class="bg-white rounded-2xl border-2 border-amber-400/60 overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col group relative">
+            
+            <!-- VIP Badge Ribbon -->
+            <div class="absolute top-3 right-3 z-10 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[11px] font-black px-3 py-1 rounded-full shadow-md flex items-center gap-1">
+                <i class="fa-solid fa-crown text-[10px]"></i> صفقة لقطة VIP
+            </div>
+
+            <div class="absolute top-3 left-3 z-10 bg-slate-900/80 backdrop-blur text-white text-[10px] font-bold px-2.5 py-1 rounded-full">
+                {{ car.condition }}
+            </div>
+
+            <!-- Car Image -->
+            <a href="/cars/{{ car.id }}" class="relative h-52 overflow-hidden bg-slate-100 block">
+                <img src="{{ car.main_image }}" alt="{{ car.title }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+            </a>
+
+            <!-- Content -->
+            <div class="p-5 flex flex-col flex-grow">
+                <!-- Location & Date -->
+                <div class="flex items-center justify-between text-xs text-slate-400 font-semibold mb-2">
+                    <span class="flex items-center gap-1"><i class="fa-solid fa-location-dot text-brand-500"></i> {{ car.governorate }} - {{ car.city }}</span>
+                    <span><i class="fa-regular fa-clock ml-1"></i> حديثاً</span>
+                </div>
+
+                <!-- Title -->
+                <h3 class="font-black text-slate-900 text-base line-clamp-1 mb-2 group-hover:text-brand-600 transition">
+                    <a href="/cars/{{ car.id }}">{{ car.title }}</a>
+                </h3>
+
+                <!-- Specs Pill Tags -->
+                <div class="grid grid-cols-3 gap-2 py-2.5 my-2 border-y border-slate-100 text-center text-xs font-bold text-slate-600 bg-slate-50/60 rounded-xl">
+                    <div>
+                        <div class="text-[10px] text-slate-400 font-medium">سنة الصنع</div>
+                        <div>{{ car.year }}</div>
+                    </div>
+                    <div>
+                        <div class="text-[10px] text-slate-400 font-medium">العداد</div>
+                        <div>{{ car.mileage|format_number }} كم</div>
+                    </div>
+                    <div>
+                        <div class="text-[10px] text-slate-400 font-medium">الفتيس</div>
+                        <div>{{ car.transmission }}</div>
+                    </div>
+                </div>
+
+                <!-- Paint Condition Alert -->
+                <div class="text-xs text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg font-bold flex items-center gap-1.5 mb-3">
+                    <i class="fa-solid fa-check-double text-emerald-600"></i>
+                    <span>{{ car.paint_condition }}</span>
+                </div>
+
+                <!-- Price and Actions -->
+                <div class="mt-auto pt-2 flex items-center justify-between">
+                    <div>
+                        <div class="text-xs text-slate-400 font-bold">السعر المطلوب</div>
+                        <div class="text-xl font-black text-brand-600">{{ car.price|format_egp }}</div>
+                        {% if car.monthly_installment > 0 %}
+                        <div class="text-[10px] text-slate-500 font-bold">أو قسط شهري {{ car.monthly_installment|format_egp }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <a href="https://wa.me/{{ car.seller_whatsapp }}?text=مرحبا%20بخصوص%20سيارتك%20المعروضة%20على%20منصة%20لقطة:%20{{ car.title }}" target="_blank" class="w-10 h-10 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white flex items-center justify-center text-lg shadow-sm transition" title="تواصل عبر واتساب">
+                            <i class="fa-brands fa-whatsapp"></i>
+                        </a>
+                        <a href="tel:{{ car.seller_phone }}" class="w-10 h-10 rounded-xl bg-slate-900 hover:bg-brand-600 text-white flex items-center justify-center text-sm shadow-sm transition" title="اتصال هاتفي">
+                            <i class="fa-solid fa-phone"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Section 2: Monetization & Value Banner (كيف نحمي الصفقات ونربح العمولات) -->
+<section class="bg-gradient-to-r from-slate-900 to-slate-800 text-white py-14 border-y border-slate-700 relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="text-center max-w-2xl mx-auto mb-10">
+            <span class="text-amber-400 font-black text-xs uppercase tracking-widest">منظومة لقطة الذكية</span>
+            <h2 class="text-2xl sm:text-3xl font-black mt-1">كيف تضمن لقطة حقوق البيع والشراء والإيجار؟</h2>
+            <p class="text-slate-400 text-xs sm:text-sm mt-1">نظام متكامل يربط المشتري بالبائع مع توفير الفحص الفني وعربون الحجز الإلكتروني</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <!-- Box 1 -->
+            <div class="bg-slate-800/60 backdrop-blur p-6 rounded-2xl border border-slate-700/80 space-y-3 hover:border-brand-500 transition">
+                <div class="w-12 h-12 bg-amber-500/10 text-amber-400 rounded-xl flex items-center justify-center text-2xl">
+                    <i class="fa-solid fa-shield-check"></i>
+                </div>
+                <h3 class="font-bold text-base text-white">فحص فني معتمد (100 نقطة)</h3>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    فحص الشاسيه والموتور والدهان والفتيس في مراكز فحص لقطة الشريكة لتجنب أي خداع أو عيوب خفية.
+                </p>
+            </div>
+
+            <!-- Box 2 -->
+            <div class="bg-slate-800/60 backdrop-blur p-6 rounded-2xl border border-slate-700/80 space-y-3 hover:border-brand-500 transition">
+                <div class="w-12 h-12 bg-emerald-500/10 text-emerald-400 rounded-xl flex items-center justify-center text-2xl">
+                    <i class="fa-solid fa-hand-holding-dollar"></i>
+                </div>
+                <h3 class="font-bold text-base text-white">حجز الإيجار الفوري بالعربون</h3>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    احجز أي سيارة إيجار يومي أو سياحي بدفع عربون رمزي مؤكد عبر الموقع، وباقي الحساب عند استلام المفتاح.
+                </p>
+            </div>
+
+            <!-- Box 3 -->
+            <div class="bg-slate-800/60 backdrop-blur p-6 rounded-2xl border border-slate-700/80 space-y-3 hover:border-brand-500 transition">
+                <div class="w-12 h-12 bg-orange-500/10 text-orange-400 rounded-xl flex items-center justify-center text-2xl">
+                    <i class="fa-solid fa-bullhorn"></i>
+                </div>
+                <h3 class="font-bold text-base text-white">إعلانات لقطة المميزة VIP</h3>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    بيع سيارتك أسرع 5 أضعاف مع تثبيت الإعلان في أول نتائج البحث والإشعار المباشر للمشترين المهتمين.
+                </p>
+            </div>
+
+            <!-- Box 4 -->
+            <div class="bg-slate-800/60 backdrop-blur p-6 rounded-2xl border border-slate-700/80 space-y-3 hover:border-brand-500 transition">
+                <div class="w-12 h-12 bg-blue-500/10 text-blue-400 rounded-xl flex items-center justify-center text-2xl">
+                    <i class="fa-solid fa-file-invoice-dollar"></i>
+                </div>
+                <h3 class="font-bold text-base text-white">تقسيط فوري مع البنوك</h3>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    شراكة مع كبرى بنوك وشركات التمويل الاستهلاكي في مصر لتقسيط أي سيارة مستعملة أو زيرو بأقل فائدة.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Section 3: Car Rentals with Commission Booking (قسم إيجار السيارات مع عمولة الحجز) -->
+<section class="py-14 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+        <div>
+            <div class="flex items-center gap-2 text-emerald-600 font-extrabold text-xs uppercase tracking-wider mb-1">
+                <i class="fa-solid fa-key text-sm"></i> تأجير سيارات مباشر
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-black text-slate-900">سيارات للإيجار اليومي والشهري</h2>
+            <p class="text-slate-500 text-xs sm:text-sm mt-0.5">احجز سيارتك أونلاين بدفع عربون الحجز (عمولة المنصة) واستلم فورا</p>
+        </div>
+        <a href="/rentals" class="text-emerald-600 hover:text-emerald-700 font-bold text-sm flex items-center gap-1 group">
+            <span>تصفح كل أسطول الإيجار</span>
+            <i class="fa-solid fa-arrow-left text-xs transition transform group-hover:-translate-x-1"></i>
+        </a>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {% for rental in rentals %}
+        <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-lg transition flex flex-col group">
+            <div class="relative h-44 overflow-hidden bg-slate-100">
+                <img src="{{ rental.image }}" alt="{{ rental.title }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                <div class="absolute bottom-2 right-2 bg-slate-900/80 backdrop-blur text-white text-[11px] font-bold px-2 py-0.5 rounded">
+                    {{ rental.governorate }}
+                </div>
+                {% if rental.with_driver %}
+                <div class="absolute top-2 left-2 bg-blue-600 text-white text-[10px] font-bold px-2 py-0.5 rounded shadow">
+                    سائق متاح
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="p-4 flex flex-col flex-grow">
+                <h4 class="font-black text-slate-800 text-sm line-clamp-1 mb-2">{{ rental.title }}</h4>
+                <div class="text-xs text-slate-400 font-medium mb-3 flex items-center gap-1">
+                    <i class="fa-solid fa-building-shield text-slate-400"></i> {{ rental.company_name }}
+                </div>
+
+                <div class="mt-auto pt-3 border-t border-slate-100 flex items-center justify-between">
+                    <div>
+                        <div class="text-[10px] text-slate-400 font-bold">سعر اليوم</div>
+                        <div class="text-base font-black text-emerald-600">{{ rental.daily_price|format_egp }}</div>
+                        <div class="text-[9px] text-amber-600 font-bold">عربون الموقع: {{ rental.deposit_commission }} ج.م</div>
+                    </div>
+                    <a href="/rentals/{{ rental.id }}" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3.5 py-2 rounded-xl transition shadow">
+                        احجز الآن
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Section 4: Latest Cars for Sale (أحدث سيارات معروضة للبيع) -->
+<section class="py-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-slate-200">
+    <div class="flex items-center justify-between mb-8">
+        <div>
+            <h2 class="text-2xl font-black text-slate-900">أحدث السيارات المعروضة اليوم</h2>
+            <p class="text-slate-500 text-xs sm:text-sm">تحديث فوري لكل السيارات المضافة حديثاً في مصر</p>
+        </div>
+        <a href="/cars" class="text-brand-600 hover:text-brand-700 font-bold text-sm flex items-center gap-1">
+            <span>عرض كل السيارات ({{ stats.cars }})</span>
+            <i class="fa-solid fa-arrow-left text-xs"></i>
+        </a>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {% for car in latest_cars %}
+        <div class="bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-md transition flex flex-col">
+            <a href="/cars/{{ car.id }}" class="relative h-44 overflow-hidden bg-slate-100 block">
+                <img src="{{ car.main_image }}" alt="{{ car.title }}" class="w-full h-full object-cover">
+                {% if car.is_featured %}
+                <span class="absolute top-2 right-2 bg-amber-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">لقطة VIP</span>
+                {% endif %}
+            </a>
+            <div class="p-3.5 flex flex-col flex-grow">
+                <div class="text-[11px] text-slate-400 font-semibold mb-1 flex items-center justify-between">
+                    <span>{{ car.make }} - {{ car.year }}</span>
+                    <span>{{ car.city }}</span>
+                </div>
+                <h4 class="font-bold text-slate-800 text-sm line-clamp-1 mb-2 hover:text-brand-600">
+                    <a href="/cars/{{ car.id }}">{{ car.title }}</a>
+                </h4>
+                <div class="mt-auto pt-2 border-t border-slate-100 flex items-center justify-between">
+                    <span class="text-base font-black text-slate-900">{{ car.price|format_egp }}</span>
+                    <a href="/cars/{{ car.id }}" class="text-xs font-bold text-brand-600 hover:underline">التفاصيل</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Section 5: Call To Action (أضف سيارتك) -->
+<section class="py-14 bg-gradient-to-r from-orange-600 to-amber-600 text-white text-center">
+    <div class="max-w-4xl mx-auto px-4 space-y-4">
+        <h2 class="text-3xl sm:text-4xl font-black">معاك عربية وعايز تبيعها بسعر لقطة وفي أسرع وقت؟</h2>
+        <p class="text-orange-100 text-sm sm:text-base font-medium max-w-xl mx-auto">
+            أضف إعلانك في دقيقة واحدة، واستقبل اتصالات المشترين فوراً على هاتفك وواتساب بدون وسطاء وبأعلى عائد.
+        </p>
+        <div class="pt-4 flex flex-wrap items-center justify-center gap-4">
+            <a href="/add-listing" class="bg-white text-slate-900 hover:bg-slate-100 font-black px-8 py-3.5 rounded-2xl shadow-xl text-base transition transform hover:scale-105">
+                <i class="fa-solid fa-plus-circle text-brand-600 ml-1"></i> أضف سيارتك الآن مجاناً
+            </a>
+            <a href="/admin" class="bg-orange-700/40 hover:bg-orange-700/60 border border-orange-300/40 text-white font-bold px-6 py-3.5 rounded-2xl text-sm transition">
+                <i class="fa-solid fa-chart-pie ml-1"></i> شاهد أرباح وعمولات المنصة
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

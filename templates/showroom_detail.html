@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}{{ showroom.name }} | معارض منصة لقطة{% endblock %}
+
+{% block content %}
+<!-- Showroom Header -->
+<div class="bg-slate-900 text-white relative">
+    <div class="h-60 overflow-hidden opacity-40">
+        <img src="{{ showroom.banner }}" alt="{{ showroom.name }}" class="w-full h-full object-cover">
+    </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative -mt-20 pb-8 flex flex-col sm:flex-row items-start sm:items-end gap-6">
+        <div class="w-28 h-28 rounded-3xl bg-white p-2 shadow-2xl overflow-hidden border-2 border-white flex-shrink-0">
+            <img src="{{ showroom.logo }}" alt="{{ showroom.name }}" class="w-full h-full object-cover rounded-2xl">
+        </div>
+        <div class="space-y-1">
+            <div class="flex items-center gap-2">
+                <h1 class="text-3xl font-black">{{ showroom.name }}</h1>
+                <span class="bg-amber-400 text-slate-900 text-xs font-black px-2.5 py-0.5 rounded-full"><i class="fa-solid fa-crown text-[10px]"></i> معتمد</span>
+            </div>
+            <p class="text-xs text-slate-300">{{ showroom.address }}</p>
+            <div class="flex items-center gap-4 text-xs pt-1">
+                <a href="tel:{{ showroom.phone }}" class="text-emerald-400 font-bold"><i class="fa-solid fa-phone ml-1"></i> {{ showroom.phone }}</a>
+                <a href="https://wa.me/{{ showroom.whatsapp }}" target="_blank" class="text-emerald-400 font-bold"><i class="fa-brands fa-whatsapp ml-1"></i> واتساب المعرض</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <h2 class="text-xl font-black text-slate-900 mb-6">السيارات المعروضة لدى {{ showroom.name }} ({{ cars|length }})</h2>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for car in cars %}
+        <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition flex flex-col group">
+            <a href="/cars/{{ car.id }}" class="relative h-52 overflow-hidden bg-slate-100 block">
+                <img src="{{ car.main_image }}" alt="{{ car.title }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+            </a>
+            <div class="p-5 flex flex-col flex-grow">
+                <h3 class="font-black text-slate-900 text-base mb-2 group-hover:text-brand-600">
+                    <a href="/cars/{{ car.id }}">{{ car.title }}</a>
+                </h3>
+                <div class="flex items-center gap-2 text-xs text-slate-500 font-bold mb-3">
+                    <span>{{ car.year }}</span> • <span>{{ car.mileage|format_number }} كم</span> • <span>{{ car.transmission }}</span>
+                </div>
+                <div class="mt-auto pt-3 border-t border-slate-100 flex items-center justify-between">
+                    <span class="text-lg font-black text-brand-600">{{ car.price|format_egp }}</span>
+                    <a href="/cars/{{ car.id }}" class="bg-slate-900 hover:bg-brand-600 text-white font-bold text-xs px-3.5 py-2 rounded-xl transition">
+                        تفاصيل السيارة
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,373 @@
+{% extends "base.html" %}
+
+{% block title %}{{ car.title }} | منصة لقطة للسيارات{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb -->
+<div class="bg-white border-b border-slate-200 py-3.5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center gap-2 text-xs text-slate-500 font-semibold">
+        <a href="/" class="hover:text-brand-600">الرئيسية</a>
+        <i class="fa-solid fa-chevron-left text-[10px]"></i>
+        <a href="/cars" class="hover:text-brand-600">سيارات للبيع</a>
+        <i class="fa-solid fa-chevron-left text-[10px]"></i>
+        <a href="/cars?make={{ car.make }}" class="hover:text-brand-600">{{ car.make }}</a>
+        <i class="fa-solid fa-chevron-left text-[10px]"></i>
+        <span class="text-slate-800 font-bold truncate">{{ car.model }} {{ car.year }}</span>
+    </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- Left 2 Cols: Gallery, Details, Specs -->
+        <div class="lg:col-span-2 space-y-6">
+            
+            <!-- Title Card -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+                <div class="flex flex-wrap items-center gap-2 mb-3">
+                    {% if car.is_featured %}
+                    <span class="bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-black px-3 py-1 rounded-full shadow-sm">
+                        <i class="fa-solid fa-crown text-[10px] ml-1"></i> إعلان لقطة VIP
+                    </span>
+                    {% endif %}
+                    <span class="bg-slate-900 text-white text-xs font-bold px-3 py-1 rounded-full">{{ car.condition }}</span>
+                    <span class="bg-emerald-50 text-emerald-700 text-xs font-bold px-3 py-1 rounded-full border border-emerald-200">
+                        <i class="fa-solid fa-certificate text-emerald-600 ml-1"></i> {{ car.paint_condition }}
+                    </span>
+                    <span class="text-xs text-slate-400 mr-auto"><i class="fa-solid fa-eye ml-1"></i> {{ car.views_count }} مشاهدة</span>
+                </div>
+                <h1 class="text-2xl sm:text-3xl font-black text-slate-900 leading-snug">{{ car.title }}</h1>
+                <div class="flex items-center gap-2 text-xs text-slate-500 font-semibold mt-2">
+                    <span><i class="fa-solid fa-location-dot text-brand-500 ml-1"></i> {{ car.governorate }} - {{ car.city }}</span>
+                    <span>•</span>
+                    <span>معروض بواسطة: <strong class="text-slate-800">{{ car.seller_type }}</strong></span>
+                </div>
+            </div>
+
+            <!-- Image Gallery -->
+            <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                <div class="h-96 sm:h-[460px] bg-slate-900 relative">
+                    <img id="mainImage" src="{{ car.main_image }}" alt="{{ car.title }}" class="w-full h-full object-contain">
+                </div>
+                <!-- Gallery Thumbnails -->
+                {% set gallery_imgs = car.gallery|parse_json %}
+                {% if gallery_imgs|length > 1 %}
+                <div class="p-3 bg-slate-50 border-t border-slate-200 flex gap-3 overflow-x-auto">
+                    {% for img in gallery_imgs %}
+                    <img src="{{ img }}" onclick="document.getElementById('mainImage').src = this.src" class="w-20 h-16 object-cover rounded-xl cursor-pointer border-2 border-transparent hover:border-brand-500 transition">
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Specifications Table -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+                <h3 class="text-lg font-black text-slate-900 mb-5 pb-3 border-b border-slate-100 flex items-center gap-2">
+                    <i class="fa-solid fa-list-check text-brand-500"></i> المواصفات الفنية للسيارة
+                </h3>
+
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs">
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                        <span class="text-slate-400 block mb-1">الماركة</span>
+                        <strong class="text-slate-800 text-sm">{{ car.make }}</strong>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                        <span class="text-slate-400 block mb-1">الموديل</span>
+                        <strong class="text-slate-800 text-sm">{{ car.model }}</strong>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                        <span class="text-slate-400 block mb-1">سنة الصنع</span>
+                        <strong class="text-slate-800 text-sm">{{ car.year }}</strong>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                        <span class="text-slate-400 block mb-1">الكيلومترات</span>
+                        <strong class="text-slate-800 text-sm">{{ car.mileage|format_number }} كم</strong>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                        <span class="text-slate-400 block mb-1">الفتيس / ناقل الحركة</span>
+                        <strong class="text-slate-800 text-sm">{{ car.transmission }}</strong>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                        <span class="text-slate-400 block mb-1">سعة المحرك</span>
+                        <strong class="text-slate-800 text-sm">{{ car.engine_capacity }}</strong>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                        <span class="text-slate-400 block mb-1">نوع الوقود</span>
+                        <strong class="text-slate-800 text-sm">{{ car.fuel_type }}</strong>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                        <span class="text-slate-400 block mb-1">حالة الدهان</span>
+                        <strong class="text-emerald-700 text-sm">{{ car.paint_condition }}</strong>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                        <span class="text-slate-400 block mb-1">اللون الخارجي</span>
+                        <strong class="text-slate-800 text-sm">{{ car.color }}</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features and Options -->
+            {% set car_features = car.features|parse_json %}
+            {% if car_features %}
+            <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+                <h3 class="text-lg font-black text-slate-900 mb-4 pb-3 border-b border-slate-100 flex items-center gap-2">
+                    <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i> التجهيزات والكماليات
+                </h3>
+                <div class="flex flex-wrap gap-2.5">
+                    {% for feat in car_features %}
+                    <span class="bg-slate-100 text-slate-700 text-xs font-bold px-3.5 py-1.5 rounded-xl flex items-center gap-1.5 border border-slate-200">
+                        <i class="fa-solid fa-circle-check text-emerald-500 text-[10px]"></i> {{ feat }}
+                    </span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Seller Description -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+                <h3 class="text-lg font-black text-slate-900 mb-3 pb-3 border-b border-slate-100 flex items-center gap-2">
+                    <i class="fa-solid fa-align-right text-brand-500"></i> تفاصيل الإعلان من البائع
+                </h3>
+                <p class="text-sm text-slate-700 leading-relaxed whitespace-pre-line font-medium">
+                    {{ car.description }}
+                </p>
+            </div>
+
+            <!-- Loqta Inspection Guarantee Service (Monetization Hub) -->
+            <div class="bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-amber-500/10 rounded-2xl border-2 border-amber-300 p-6">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2 text-amber-800 font-black text-sm">
+                            <i class="fa-solid fa-shield-halved text-lg text-amber-600"></i> خدمة فحص لقطة المعتمد (100 نقطة فحص)
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed max-w-xl">
+                            عايز تشتري العربية دي وأنت مطمن؟ اطلب فحص فني شامل للشاسيه والدهان والموتور والفتيس في مراكز فحص لقطة بـ <strong>1,500 ج.م</strong> فقط مع تقرير مفصل فوري.
+                        </p>
+                    </div>
+                    <button onclick="openInspectionModal()" class="bg-slate-900 hover:bg-slate-800 text-amber-300 font-black text-xs px-5 py-3 rounded-xl transition shadow whitespace-nowrap">
+                        <i class="fa-solid fa-file-signature ml-1"></i> اطلب الفحص المعتمد
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right Col: Price, Seller Contact, Financing Calculator -->
+        <div class="space-y-6">
+            
+            <!-- Price and Direct Contact Card -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-md sticky top-24 space-y-6">
+                <div>
+                    <span class="text-xs text-slate-400 font-bold block mb-1">السعر المطلوب</span>
+                    <div class="text-3xl font-black text-brand-600">{{ car.price|format_egp }}</div>
+                    <div class="text-xs text-slate-500 font-semibold mt-1">نظام الدفع: <strong class="text-slate-800">{{ car.payment_type }}</strong></div>
+                </div>
+
+                <!-- Seller Info -->
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 flex items-center gap-3">
+                    <div class="w-12 h-12 bg-slate-200 text-slate-600 rounded-full flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-user-tie"></i>
+                    </div>
+                    <div>
+                        <div class="font-bold text-sm text-slate-900">{{ car.seller_name }}</div>
+                        <div class="text-[11px] text-slate-500">{{ car.seller_type }} - {{ car.governorate }}</div>
+                    </div>
+                </div>
+
+                <!-- Contact Buttons -->
+                <div class="space-y-2.5">
+                    <a href="https://wa.me/{{ car.seller_whatsapp }}?text=مرحبا،%20أنا%20مهتم%20بشراء%20سيارتك%20المعروضة%20على%20منصة%20لقطة:%20{{ car.title }}%20(سعر:%20{{ car.price|format_egp }})" target="_blank" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-black py-3 px-4 rounded-xl text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 transition">
+                        <i class="fa-brands fa-whatsapp text-lg"></i>
+                        <span>تواصل عبر واتساب فوراً</span>
+                    </a>
+
+                    <a href="tel:{{ car.seller_phone }}" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-black py-3 px-4 rounded-xl text-sm flex items-center justify-center gap-2 shadow-sm transition">
+                        <i class="fa-solid fa-phone text-sm"></i>
+                        <span>اتصال بالبائع: {{ car.seller_phone }}</span>
+                    </a>
+                </div>
+
+                <!-- Installment Calculator Widget -->
+                <div class="pt-4 border-t border-slate-100">
+                    <h4 class="font-black text-sm text-slate-900 mb-3 flex items-center gap-1.5">
+                        <i class="fa-solid fa-calculator text-brand-500"></i> حاسبة التقسيط الفورية
+                    </h4>
+
+                    <div class="space-y-3 text-xs">
+                        <div>
+                            <label class="block text-slate-600 font-bold mb-1">المقدم المدفوع (ج.م)</label>
+                            <input id="calcDownPayment" type="number" value="{{ (car.price * 0.25)|int }}" oninput="calculateInstallment()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-slate-600 font-bold mb-1">مدة التقسيط</label>
+                            <select id="calcYears" onchange="calculateInstallment()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold outline-none">
+                                <option value="1">سنة واحدة (12 شهر)</option>
+                                <option value="2">سنتين (24 شهر)</option>
+                                <option value="3" selected>3 سنوات (36 شهر)</option>
+                                <option value="5">5 سنوات (60 شهر)</option>
+                            </select>
+                        </div>
+
+                        <div class="bg-brand-50 p-3 rounded-xl border border-brand-100 text-center">
+                            <span class="text-[11px] text-brand-700 font-bold">القسط الشهري التقريبي:</span>
+                            <div id="monthlyResult" class="text-lg font-black text-brand-600">0 ج.م</div>
+                        </div>
+
+                        <button onclick="openFinanceModal()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl text-xs transition">
+                            قدم طلب تقسيط لهذه السيارة
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- Inspection Request Modal -->
+<div id="inspectionModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <h3 class="font-black text-slate-900 text-base flex items-center gap-2">
+                <i class="fa-solid fa-shield-check text-amber-500"></i> حجز موعد فحص لقطة المعتمد
+            </h3>
+            <button onclick="closeInspectionModal()" class="text-slate-400 hover:text-slate-600 text-lg">&times;</button>
+        </div>
+
+        <form id="inspectionForm" onsubmit="submitInspection(event)" class="space-y-3 text-xs">
+            <input type="hidden" name="car_id" value="{{ car.id }}">
+            <input type="hidden" name="car_title" value="{{ car.title }}">
+
+            <div>
+                <label class="block font-bold text-slate-700 mb-1">اسمك بالكامل</label>
+                <input type="text" name="customer_name" required placeholder="مثال: أحمد محمد" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs outline-none">
+            </div>
+
+            <div>
+                <label class="block font-bold text-slate-700 mb-1">رقم الهاتف (واتساب)</label>
+                <input type="tel" name="customer_phone" required placeholder="01012345678" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs outline-none">
+            </div>
+
+            <div>
+                <label class="block font-bold text-slate-700 mb-1">مركز الفحص المفضل</label>
+                <select name="center_location" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs outline-none">
+                    <option value="مركز فحص لقطة - مدينة نصر">مركز فحص لقطة - مدينة نصر (القاهرة)</option>
+                    <option value="مركز فحص لقطة - المهندسين">مركز فحص لقطة - المهندسين (الجيزة)</option>
+                    <option value="مركز فحص لقطة - سموحة">مركز فحص لقطة - سموحة (الإسكندرية)</option>
+                    <option value="فحص متنقل عند موقع البائع">فحص متنقل عند موقع البائع (+500 ج)</option>
+                </select>
+            </div>
+
+            <div class="bg-amber-50 p-3 rounded-xl border border-amber-200 text-amber-800 text-[11px] font-bold">
+                رسوم الفحص: 1,500 ج.م تشمل فحص 100 نقطة وتقرير كمبيوتر للشاسيه والمحرك.
+            </div>
+
+            <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-black py-2.5 rounded-xl text-xs transition">
+                تأكيد حجز الفحص
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Financing Modal -->
+<div id="financeModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <h3 class="font-black text-slate-900 text-base flex items-center gap-2">
+                <i class="fa-solid fa-calculator text-blue-600"></i> طلب تقسيط سيارة مع بنوك لقطة
+            </h3>
+            <button onclick="closeFinanceModal()" class="text-slate-400 hover:text-slate-600 text-lg">&times;</button>
+        </div>
+
+        <form id="financeForm" onsubmit="submitFinance(event)" class="space-y-3 text-xs">
+            <input type="hidden" name="car_title" value="{{ car.title }}">
+            <input type="hidden" name="car_price" value="{{ car.price }}">
+
+            <div>
+                <label class="block font-bold text-slate-700 mb-1">الاسم بالكامل</label>
+                <input type="text" name="customer_name" required placeholder="اسم العميل" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs outline-none">
+            </div>
+
+            <div>
+                <label class="block font-bold text-slate-700 mb-1">رقم الهاتف</label>
+                <input type="tel" name="customer_phone" required placeholder="01000000000" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs outline-none">
+            </div>
+
+            <div>
+                <label class="block font-bold text-slate-700 mb-1">جهة العمل</label>
+                <select name="job_type" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs outline-none">
+                    <option value="قطاع خاص مؤمن عليه">قطاع خاص مؤمن عليه</option>
+                    <option value="موظف حكومي">موظف حكومي</option>
+                    <option value="صاحب سجل تجاري وبطاقة ضريبية">صاحب عمل حر / سجل تجاري</option>
+                    <option value="أخرى">أخرى</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block font-bold text-slate-700 mb-1">متوسط الدخل الشهري</label>
+                <select name="monthly_income" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs outline-none">
+                    <option value="15,000 - 25,000 ج.م">15,000 - 25,000 ج.م</option>
+                    <option value="25,000 - 45,000 ج.م">25,000 - 45,000 ج.م</option>
+                    <option value="أكثر من 45,000 ج.م">أكثر من 45,000 ج.م</option>
+                </select>
+            </div>
+
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-2.5 rounded-xl text-xs transition">
+                إرسال طلب التقسيط
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    const carPrice = {{ car.price }};
+    
+    function calculateInstallment() {
+        const down = parseFloat(document.getElementById('calcDownPayment').value) || 0;
+        const years = parseInt(document.getElementById('calcYears').value) || 3;
+        const remaining = Math.max(0, carPrice - down);
+        
+        // Approximate standard Egyptian auto loan interest ~ 18% per year
+        const interestRate = 0.18;
+        const totalInterest = remaining * interestRate * years;
+        const totalToFinance = remaining + totalInterest;
+        const monthly = Math.round(totalToFinance / (years * 12));
+        
+        document.getElementById('monthlyResult').innerText = monthly.toLocaleString('ar-EG') + " ج.م / شهر";
+    }
+
+    calculateInstallment();
+
+    function openInspectionModal() { document.getElementById('inspectionModal').classList.remove('hidden'); }
+    function closeInspectionModal() { document.getElementById('inspectionModal').classList.add('hidden'); }
+    function openFinanceModal() { document.getElementById('financeModal').classList.remove('hidden'); }
+    function closeFinanceModal() { document.getElementById('financeModal').classList.add('hidden'); }
+
+    async function submitInspection(e) {
+        e.preventDefault();
+        const form = e.target;
+        const formData = new FormData(form);
+        const res = await fetch('/api/request-inspection', { method: 'POST', body: formData });
+        const data = await res.json();
+        closeInspectionModal();
+        showToast(data.message, true);
+    }
+
+    async function submitFinance(e) {
+        e.preventDefault();
+        const form = e.target;
+        const formData = new FormData(form);
+        formData.append('down_payment', document.getElementById('calcDownPayment').value);
+        formData.append('installments_years', document.getElementById('calcYears').value);
+        const res = await fetch('/api/finance-lead', { method: 'POST', body: formData });
+        const data = await res.json();
+        closeFinanceModal();
+        showToast(data.message, true);
+    }
+</script>
+{% endblock %}
